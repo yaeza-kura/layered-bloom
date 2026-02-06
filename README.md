@@ -24,7 +24,7 @@ pip install -r requirements.txt
 mkdocs serve
 ```
 
-ブラウザで http://127.0.0.1:8000/ を開く。`Ctrl+C` で停止。
+ブラウザで [ローカルホスト](http://127.0.0.1:8000/) を開く。`Ctrl+C` で停止。
 
 ## ブログ記事の追加
 
@@ -57,7 +57,7 @@ copy .env.example .env
 # .env を編集して R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_PUBLIC_URL を記入
 ```
 
-6. アップロード用ツールの依存をインストール
+1. アップロード用ツールの依存をインストール
 
 ```bash
 pip install -r tools/requirements.txt
@@ -116,7 +116,7 @@ mkdocs gh-deploy --force
 
 ## ディレクトリ構成
 
-```
+```text
 docs/
 ├── index.md              # トップページ
 ├── portfolio.md          # 実績ページ

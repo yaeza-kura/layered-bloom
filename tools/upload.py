@@ -37,13 +37,13 @@ from PIL import Image
 
 load_dotenv()
 
-ACCOUNT_ID = os.environ["R2_ACCOUNT_ID"]
-ACCESS_KEY_ID = os.environ["R2_ACCESS_KEY_ID"]
-SECRET_ACCESS_KEY = os.environ["R2_SECRET_ACCESS_KEY"]
-BUCKET_NAME = os.environ["R2_BUCKET_NAME"]
-PUBLIC_URL = os.environ["R2_PUBLIC_URL"].rstrip("/")
+ACCOUNT_ID: str = os.environ["R2_ACCOUNT_ID"]
+ACCESS_KEY_ID: str = os.environ["R2_ACCESS_KEY_ID"]
+SECRET_ACCESS_KEY: str = os.environ["R2_SECRET_ACCESS_KEY"]
+BUCKET_NAME: str = os.environ["R2_BUCKET_NAME"]
+PUBLIC_URL: str = os.environ["R2_PUBLIC_URL"].rstrip("/")
 
-ENDPOINT_URL = f"https://{ACCOUNT_ID}.r2.cloudflarestorage.com"
+ENDPOINT_URL: str = f"https://{ACCOUNT_ID}.r2.cloudflarestorage.com"
 
 
 def get_client():
@@ -61,9 +61,9 @@ def resize_image(file_path: Path, max_width: int, quality: int) -> tuple[bytes, 
     img = Image.open(file_path)
 
     if img.width > max_width:
-        ratio = max_width / img.width
-        new_size = (max_width, int(img.height * ratio))
-        img = img.resize(new_size, Image.LANCZOS)
+        ratio: float = max_width / img.width
+        new_size: tuple[int, int] = (max_width, int(img.height * ratio))
+        img: Image.Image = img.resize(new_size, Image.Resampling.LANCZOS)
 
     # RGBA → RGB 変換（JPEG保存のため）
     if img.mode in ("RGBA", "P"):
@@ -102,7 +102,7 @@ def upload_file(
     return url
 
 
-def list_objects(client):
+def list_objects(client) -> None:
     """バケット内のオブジェクト一覧を表示。"""
     paginator = client.get_paginator("list_objects_v2")
     for page in paginator.paginate(Bucket=BUCKET_NAME):
@@ -111,7 +111,7 @@ def list_objects(client):
             print(f"  {obj['Key']}  ({size_kb:.0f} KB)")
 
 
-def delete_object(client, key: str):
+def delete_object(client, key: str) -> None:
     """オブジェクトを削除。"""
     client.delete_object(Bucket=BUCKET_NAME, Key=key)
     print(f"  Deleted: {key}")
@@ -126,7 +126,7 @@ def main():
     parser.add_argument("--no-resize", action="store_true", help="リサイズせず元画像のまま")
     parser.add_argument("--list", action="store_true", help="アップロード済み一覧")
     parser.add_argument("--delete", metavar="KEY", help="画像を削除")
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
     client = get_client()
 
@@ -149,7 +149,7 @@ def main():
         if not path.exists():
             print(f"  SKIP: {f} (not found)", file=sys.stderr)
             continue
-        url = upload_file(client, path, args.prefix, args.width, args.quality, args.no_resize)
+        url: str = upload_file(client, path, args.prefix, args.width, args.quality, args.no_resize)
         urls.append(url)
 
     if urls:

@@ -1,0 +1,41 @@
+{
+  "version": "0.2",
+  "language": "en,ja",
+  "words": [
+    "admonition",
+    "boto",
+    "botocore",
+    "Cloudflare",
+    "codez",
+    "Cormorant",
+    "dotenv",
+    "Fira",
+    "fontawesome",
+    "Garamond",
+    "ghp",
+    "gitkeep",
+    "LANCZOS",
+    "mkdocs",
+    "Noto",
+    "Outfit",
+    "Pillow",
+    "pybuilder",
+    "pymdown",
+    "pymdownx",
+    "rclone",
+    "superfences",
+    "twemoji",
+    "venv",
+    "vrchat",
+    "wrangler",
+    "yaeza",
+    "kura"
+  ],
+  "ignorePaths": [
+    ".venv",
+    "site",
+    "node_modules",
+    "*.min.css",
+    "*.min.js"
+  ]
+}
