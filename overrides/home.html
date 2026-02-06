@@ -322,27 +322,42 @@
   border-top: 1px solid var(--border);
 }
 
-.awards-list {
+.awards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 
-.awards-list li {
+.awards-grid li {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+  gap: 0.6rem;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid rgba(42, 42, 58, 0.3);
   transition: background 0.3s;
 }
-.awards-list li:hover {
-  background: rgba(196, 160, 212, 0.03);
+.awards-grid li:hover {
+  background: rgba(196, 160, 212, 0.05);
+}
+
+.awards-grid a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+.awards-grid a:hover {
+  color: var(--purple) !important;
 }
 
 .award-icon {
-  font-size: 1.4rem;
-  width: 2rem;
+  font-size: 1.1rem;
+  width: 1.5rem;
   text-align: center;
   flex-shrink: 0;
 }
@@ -351,20 +366,14 @@
   font-family: var(--font-body);
   font-weight: 700;
   color: var(--text);
+  font-size: 0.9rem;
   flex: 1;
 }
 
 .award-detail {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-sub);
-}
-
-.award-year {
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
-  color: var(--gold);
-  letter-spacing: 0.05em;
   flex-shrink: 0;
 }
 
@@ -597,6 +606,12 @@
   }
 }
 
+@media (max-width: 640px) {
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 480px) {
   .home-nav {
     flex-direction: column;
@@ -692,29 +707,43 @@
   <section id="awards" class="home-section awards-section fade-in">
     <div class="section-label">Awards</div>
     <h2 class="section-title">受賞歴</h2>
-    <ul class="awards-list">
-      <li>
+    <ul class="awards-grid">
+      <li><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥇</span>
-        <span class="award-name">○○フォトコン</span>
+        <span class="award-name">ツクルノモリ全力応援フォトコン</span>
         <span class="award-detail">最優秀賞</span>
-        <span class="award-year">2025</span>
-      </li>
-      <li>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
+        <span class="award-icon">🥇</span>
+        <span class="award-name">バニラちゃんフォトコンテスト</span>
+        <span class="award-detail">最優秀賞</span>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
+        <span class="award-icon">🥇</span>
+        <span class="award-name">あおぎり高校公式VRC衣装フォトコン</span>
+        <span class="award-detail">最優秀賞</span>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
+        <span class="award-icon">🥇</span>
+        <span class="award-name">九尾の傍観者フォトコンテスト</span>
+        <span class="award-detail">最優秀賞</span>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥈</span>
-        <span class="award-name">△△フォトコン</span>
-        <span class="award-detail">金賞</span>
-        <span class="award-year">2024</span>
-      </li>
-      <li>
-        <span class="award-icon">✦</span>
-        <span class="award-name">□□フォトコンテスト</span>
-        <span class="award-detail">特別賞</span>
-        <span class="award-year">2024</span>
-      </li>
+        <span class="award-name">SSフォトコン</span>
+        <span class="award-detail">優秀賞</span>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
+        <span class="award-icon">🥈</span>
+        <span class="award-name">Daimaru Matsuzakaya Virtual Photo Awards vol.1</span>
+        <span class="award-detail">優秀賞</span>
+      </a></li>
+      <li><a href="#" target="_blank" rel="noopener">
+        <span class="award-icon">🥈</span>
+        <span class="award-name">びきたんさんアバターフォトコン</span>
+        <span class="award-detail">優秀賞</span>
+      </a></li>
     </ul>
-    <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 1rem;">
-      ※ 受賞歴は後日更新予定です
-    </p>
   </section>
 
   <!-- ===== Works ===== -->
