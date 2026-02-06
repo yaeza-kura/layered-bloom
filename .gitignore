@@ -208,3 +208,7 @@ __marimo__/
 
 # Claude Code
 .claude/
+
+# アップロード用画像（R2にアップする前の一時置き場）
+uploads/*
+!uploads/.gitkeep

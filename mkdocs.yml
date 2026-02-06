@@ -52,8 +52,7 @@ extra_css:
   - stylesheets/extra.css
 
 extra:
-  # R2セットアップ後に公開URLに書き換える
-  image_base: images
+  image_base: https://pub-51f06b982bee4a31ace985952c2651a2.r2.dev/images
   social:
     - icon: fontawesome/brands/x-twitter
       link: https://x.com/yaeza_kura

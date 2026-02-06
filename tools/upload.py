@@ -117,9 +117,31 @@ def delete_object(client, key: str) -> None:
     print(f"  Deleted: {key}")
 
 
+IMAGE_EXTENSIONS: set[str] = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff", ".gif"}
+
+
+def collect_files(files: list[str], directory: str | None) -> list[Path]:
+    """ファイルリストまたはディレクトリから画像ファイルを収集する。"""
+    paths: list[Path] = []
+    if directory:
+        dir_path = Path(directory)
+        if dir_path.is_dir():
+            for p in sorted(dir_path.iterdir()):
+                if p.suffix.lower() in IMAGE_EXTENSIONS:
+                    paths.append(p)
+    for f in files:
+        path = Path(f)
+        if path.exists():
+            paths.append(path)
+        else:
+            print(f"  SKIP: {f} (not found)", file=sys.stderr)
+    return paths
+
+
 def main():
     parser = argparse.ArgumentParser(description="Cloudflare R2 画像アップローダー")
     parser.add_argument("files", nargs="*", help="アップロードするファイル")
+    parser.add_argument("--dir", metavar="DIR", help="ディレクトリ内の画像を一括アップロード")
     parser.add_argument("--prefix", default="images", help="R2上のフォルダ (default: images)")
     parser.add_argument("--width", type=int, default=1920, help="リサイズ横幅 (default: 1920)")
     parser.add_argument("--quality", type=int, default=80, help="JPEG品質 (default: 80)")
@@ -139,16 +161,13 @@ def main():
         delete_object(client, args.delete)
         return
 
-    if not args.files:
+    paths = collect_files(args.files, args.dir)
+    if not paths:
         parser.print_help()
         sys.exit(1)
 
     urls = []
-    for f in args.files:
-        path = Path(f)
-        if not path.exists():
-            print(f"  SKIP: {f} (not found)", file=sys.stderr)
-            continue
+    for path in paths:
         url: str = upload_file(client, path, args.prefix, args.width, args.quality, args.no_resize)
         urls.append(url)
 
