@@ -1,0 +1,33 @@
+/* ===== Global overrides for MkDocs Material (non-home pages) ===== */
+
+/* Use Zen Kaku Gothic New for Japanese body text across the site */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+:root {
+  --md-primary-fg-color: #7b1fa2;
+  --md-accent-fg-color: #9c27b0;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #0d0d14;
+  --md-default-fg-color--light: #8a8694;
+}
+
+.md-typeset {
+  font-family: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Links */
+.md-typeset a {
+  transition: color 0.2s;
+}
+
+/* Tables */
+.md-typeset table:not([class]) th {
+  background-color: rgba(123, 31, 162, 0.15);
+}
