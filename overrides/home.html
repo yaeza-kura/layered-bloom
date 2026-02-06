@@ -384,8 +384,8 @@
 
 .works-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 200px;
   gap: 0.75rem;
 }
 
@@ -402,22 +402,10 @@
 }
 
 .works-item.tall {
-  grid-row: 1 / -1;
+  grid-row: span 2;
 }
 .works-item.wide {
   grid-column: span 2;
-}
-
-.works-item__placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-ui);
-  font-size: 0.75rem;
-  color: var(--text-sub);
-  background: linear-gradient(135deg, var(--bg-card) 0%, #1a1a2e 100%);
 }
 
 .works-item img {
@@ -595,8 +583,8 @@
     grid-template-columns: 1fr;
   }
   .works-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 180px;
   }
   .events-grid {
     grid-template-columns: 1fr;
@@ -625,14 +613,12 @@
   }
   .works-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-auto-rows: 220px;
   }
-  .works-item.tall {
+  .works-item.tall,
+  .works-item.wide {
     grid-row: span 1;
-    aspect-ratio: 3/4;
-  }
-  .works-item {
-    aspect-ratio: 4/3;
+    grid-column: span 1;
   }
 }
 </style>
@@ -756,13 +742,37 @@
     #}
     <div class="works-grid">
       <div class="works-item tall">
-        <img src="{{ config.extra.image_base }}/ルルネ.jpg" alt="ルルネ" loading="lazy">
+        <img src="{{ config.extra.image_base }}/forest-lantern.jpg" alt="Forest Lantern" loading="lazy">
       </div>
-      <div class="works-item">
+      <div class="works-item wide">
         <img src="{{ config.extra.image_base }}/なのでび.jpg" alt="なのでび" loading="lazy">
       </div>
       <div class="works-item">
         <img src="{{ config.extra.image_base }}/サフィー.jpg" alt="サフィー" loading="lazy">
+      </div>
+      <div class="works-item wide">
+        <img src="{{ config.extra.image_base }}/cafe-smile.jpg" alt="Cafe Smile" loading="lazy">
+      </div>
+      <div class="works-item tall">
+        <img src="{{ config.extra.image_base }}/blue-gothic.jpg" alt="Blue Gothic" loading="lazy">
+      </div>
+      <div class="works-item">
+        <img src="{{ config.extra.image_base }}/ルルネ.jpg" alt="ルルネ" loading="lazy">
+      </div>
+      <div class="works-item">
+        <img src="{{ config.extra.image_base }}/library-reach.jpg" alt="Library Reach" loading="lazy">
+      </div>
+      <div class="works-item tall">
+        <img src="{{ config.extra.image_base }}/moonlit-silhouette.jpg" alt="Moonlit Silhouette" loading="lazy">
+      </div>
+      <div class="works-item wide">
+        <img src="{{ config.extra.image_base }}/angel-sketch.jpg" alt="Angel Sketch" loading="lazy">
+      </div>
+      <div class="works-item tall">
+        <img src="{{ config.extra.image_base }}/summer-pool.jpg" alt="Summer Pool" loading="lazy">
+      </div>
+      <div class="works-item wide">
+        <img src="{{ config.extra.image_base }}/night-garden.jpg" alt="Night Garden" loading="lazy">
       </div>
     </div>
   </section>
