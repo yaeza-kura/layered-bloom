@@ -571,6 +571,189 @@
   border-top: 1px solid var(--border);
 }
 
+/* ===== Noise texture overlay ===== */
+.home::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ===== Hero gradient mesh blobs ===== */
+.hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+.hero__blob--purple {
+  width: 500px;
+  height: 500px;
+  background: rgba(196, 160, 212, 0.12);
+  top: 20%;
+  left: 20%;
+  animation: blobA 12s ease-in-out infinite;
+}
+.hero__blob--sakura {
+  width: 400px;
+  height: 400px;
+  background: rgba(212, 160, 176, 0.10);
+  top: 40%;
+  right: 15%;
+  animation: blobB 15s ease-in-out infinite;
+}
+.hero__blob--gold {
+  width: 350px;
+  height: 350px;
+  background: rgba(201, 168, 76, 0.06);
+  bottom: 15%;
+  left: 40%;
+  animation: blobC 18s ease-in-out infinite;
+}
+
+@keyframes blobA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.15); }
+  66% { transform: translate(-30px, 50px) scale(0.9); }
+}
+@keyframes blobB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, 30px) scale(1.1); }
+  66% { transform: translate(40px, -60px) scale(0.85); }
+}
+@keyframes blobC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, 40px) scale(1.2); }
+  66% { transform: translate(-40px, -20px) scale(0.95); }
+}
+
+/* ===== Nav scroll state ===== */
+.home-nav {
+  transition: background 0.4s, border-color 0.4s;
+}
+.home-nav--scrolled {
+  background: rgba(8, 8, 11, 0.95);
+  border-bottom-color: rgba(196, 160, 212, 0.15);
+}
+.home-nav__links a.active {
+  color: var(--purple);
+}
+
+/* ===== Works hover overlay ===== */
+.works-item__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8,8,11,0.85) 0%, rgba(8,8,11,0.2) 40%, transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem 1.2rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.works-item:hover .works-item__overlay {
+  opacity: 1;
+}
+.works-item:hover {
+  transform: scale(1.03);
+  z-index: 2;
+}
+.works-item__overlay span {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+
+/* ===== Lightbox ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(8, 8, 11, 0.92);
+  backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  cursor: zoom-out;
+}
+.lightbox.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.lightbox img {
+  max-width: 88vw;
+  max-height: 82vh;
+  border-radius: 6px;
+  object-fit: contain;
+  transform: scale(0.92);
+  transition: transform 0.4s ease;
+}
+.lightbox.active img {
+  transform: scale(1);
+}
+.lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--text-sub);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(17, 17, 24, 0.6);
+  transition: color 0.3s, border-color 0.3s;
+}
+.lightbox__close:hover {
+  color: var(--text);
+  border-color: var(--purple);
+}
+.lightbox__caption {
+  margin-top: 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  letter-spacing: 0.05em;
+}
+
+/* ===== Stagger utilities ===== */
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.10s; }
+.stagger-3 { transition-delay: 0.15s; }
+.stagger-4 { transition-delay: 0.20s; }
+.stagger-5 { transition-delay: 0.25s; }
+.stagger-6 { transition-delay: 0.30s; }
+.stagger-7 { transition-delay: 0.35s; }
+.stagger-8 { transition-delay: 0.40s; }
+.stagger-9 { transition-delay: 0.45s; }
+.stagger-10 { transition-delay: 0.50s; }
+.stagger-11 { transition-delay: 0.55s; }
+.stagger-12 { transition-delay: 0.60s; }
+.stagger-13 { transition-delay: 0.65s; }
+.stagger-14 { transition-delay: 0.70s; }
+.stagger-15 { transition-delay: 0.75s; }
+.stagger-16 { transition-delay: 0.80s; }
+.stagger-17 { transition-delay: 0.85s; }
+.stagger-18 { transition-delay: 0.90s; }
+.stagger-19 { transition-delay: 0.95s; }
+.stagger-20 { transition-delay: 1.00s; }
+.stagger-21 { transition-delay: 1.05s; }
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .home-nav__links {
@@ -645,6 +828,9 @@
 
   <!-- ===== Hero ===== -->
   <section class="hero">
+    <div class="hero__blob hero__blob--purple"></div>
+    <div class="hero__blob hero__blob--sakura"></div>
+    <div class="hero__blob hero__blob--gold"></div>
     <h1 class="hero__brand">
       Layered <span class="bloom">Bloom's</span> photo
     </h1>
@@ -694,37 +880,37 @@
     <div class="section-label">Awards</div>
     <h2 class="section-title">受賞歴</h2>
     <ul class="awards-grid">
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-1"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥇</span>
         <span class="award-name">ツクルノモリ全力応援フォトコン</span>
         <span class="award-detail">最優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-2"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥇</span>
         <span class="award-name">バニラちゃんフォトコンテスト</span>
         <span class="award-detail">最優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-3"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥇</span>
         <span class="award-name">あおぎり高校公式VRC衣装フォトコン</span>
         <span class="award-detail">最優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-4"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥇</span>
         <span class="award-name">九尾の傍観者フォトコンテスト</span>
         <span class="award-detail">最優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-5"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥈</span>
         <span class="award-name">SSフォトコン</span>
         <span class="award-detail">優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-6"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥈</span>
         <span class="award-name">Daimaru Matsuzakaya Virtual Photo Awards vol.1</span>
         <span class="award-detail">優秀賞</span>
       </a></li>
-      <li><a href="#" target="_blank" rel="noopener">
+      <li class="fade-in stagger-7"><a href="#" target="_blank" rel="noopener">
         <span class="award-icon">🥈</span>
         <span class="award-name">びきたんさんアバターフォトコン</span>
         <span class="award-detail">優秀賞</span>
@@ -741,38 +927,89 @@
       <img src="{{ config.extra.image_base }}/photo01.jpg" alt="作品名" loading="lazy">
     #}
     <div class="works-grid">
-      <div class="works-item tall">
+      <div class="works-item tall fade-in stagger-1" data-src="{{ config.extra.image_base }}/forest-lantern.jpg" data-caption="Forest Lantern">
         <img src="{{ config.extra.image_base }}/forest-lantern.jpg" alt="Forest Lantern" loading="lazy">
+        <div class="works-item__overlay"><span>Forest Lantern</span></div>
       </div>
-      <div class="works-item wide">
-        <img src="{{ config.extra.image_base }}/なのでび.jpg" alt="なのでび" loading="lazy">
+      <div class="works-item wide fade-in stagger-2" data-src="{{ config.extra.image_base }}/crimson-gallery.jpg" data-caption="Crimson Gallery">
+        <img src="{{ config.extra.image_base }}/crimson-gallery.jpg" alt="Crimson Gallery" loading="lazy">
+        <div class="works-item__overlay"><span>Crimson Gallery</span></div>
       </div>
-      <div class="works-item">
-        <img src="{{ config.extra.image_base }}/サフィー.jpg" alt="サフィー" loading="lazy">
+      <div class="works-item fade-in stagger-3" data-src="{{ config.extra.image_base }}/frosted-glass.jpg" data-caption="Frosted Glass">
+        <img src="{{ config.extra.image_base }}/frosted-glass.jpg" alt="Frosted Glass" loading="lazy">
+        <div class="works-item__overlay"><span>Frosted Glass</span></div>
       </div>
-      <div class="works-item wide">
+      <div class="works-item wide fade-in stagger-4" data-src="{{ config.extra.image_base }}/cafe-smile.jpg" data-caption="Cafe Smile">
         <img src="{{ config.extra.image_base }}/cafe-smile.jpg" alt="Cafe Smile" loading="lazy">
+        <div class="works-item__overlay"><span>Cafe Smile</span></div>
       </div>
-      <div class="works-item tall">
+      <div class="works-item tall fade-in stagger-5" data-src="{{ config.extra.image_base }}/blue-gothic.jpg" data-caption="Blue Gothic">
         <img src="{{ config.extra.image_base }}/blue-gothic.jpg" alt="Blue Gothic" loading="lazy">
+        <div class="works-item__overlay"><span>Blue Gothic</span></div>
       </div>
-      <div class="works-item">
-        <img src="{{ config.extra.image_base }}/ルルネ.jpg" alt="ルルネ" loading="lazy">
+      <div class="works-item fade-in stagger-6" data-src="{{ config.extra.image_base }}/water-splash.jpg" data-caption="Water Splash">
+        <img src="{{ config.extra.image_base }}/water-splash.jpg" alt="Water Splash" loading="lazy">
+        <div class="works-item__overlay"><span>Water Splash</span></div>
       </div>
-      <div class="works-item">
+      <div class="works-item fade-in stagger-7" data-src="{{ config.extra.image_base }}/library-reach.jpg" data-caption="Library Reach">
         <img src="{{ config.extra.image_base }}/library-reach.jpg" alt="Library Reach" loading="lazy">
+        <div class="works-item__overlay"><span>Library Reach</span></div>
       </div>
-      <div class="works-item tall">
+      <div class="works-item tall fade-in stagger-8" data-src="{{ config.extra.image_base }}/moonlit-silhouette.jpg" data-caption="Moonlit Silhouette">
         <img src="{{ config.extra.image_base }}/moonlit-silhouette.jpg" alt="Moonlit Silhouette" loading="lazy">
+        <div class="works-item__overlay"><span>Moonlit Silhouette</span></div>
       </div>
-      <div class="works-item wide">
+      <div class="works-item wide fade-in stagger-9" data-src="{{ config.extra.image_base }}/angel-sketch.jpg" data-caption="Angel Sketch">
         <img src="{{ config.extra.image_base }}/angel-sketch.jpg" alt="Angel Sketch" loading="lazy">
+        <div class="works-item__overlay"><span>Angel Sketch</span></div>
       </div>
-      <div class="works-item tall">
+      <div class="works-item tall fade-in stagger-10" data-src="{{ config.extra.image_base }}/summer-pool.jpg" data-caption="Summer Pool">
         <img src="{{ config.extra.image_base }}/summer-pool.jpg" alt="Summer Pool" loading="lazy">
+        <div class="works-item__overlay"><span>Summer Pool</span></div>
       </div>
-      <div class="works-item wide">
+      <div class="works-item wide fade-in stagger-11" data-src="{{ config.extra.image_base }}/night-garden.jpg" data-caption="Night Garden">
         <img src="{{ config.extra.image_base }}/night-garden.jpg" alt="Night Garden" loading="lazy">
+        <div class="works-item__overlay"><span>Night Garden</span></div>
+      </div>
+      <div class="works-item wide fade-in stagger-12" data-src="{{ config.extra.image_base }}/card-trick.jpg" data-caption="Card Trick">
+        <img src="{{ config.extra.image_base }}/card-trick.jpg" alt="Card Trick" loading="lazy">
+        <div class="works-item__overlay"><span>Card Trick</span></div>
+      </div>
+      <div class="works-item tall fade-in stagger-13" data-src="{{ config.extra.image_base }}/stargazer-friends.jpg" data-caption="Stargazer Friends">
+        <img src="{{ config.extra.image_base }}/stargazer-friends.jpg" alt="Stargazer Friends" loading="lazy">
+        <div class="works-item__overlay"><span>Stargazer Friends</span></div>
+      </div>
+      <div class="works-item fade-in stagger-14" data-src="{{ config.extra.image_base }}/golden-moonrise.jpg" data-caption="Golden Moonrise">
+        <img src="{{ config.extra.image_base }}/golden-moonrise.jpg" alt="Golden Moonrise" loading="lazy">
+        <div class="works-item__overlay"><span>Golden Moonrise</span></div>
+      </div>
+      <div class="works-item wide fade-in stagger-15" data-src="{{ config.extra.image_base }}/sunset-lighthouse.jpg" data-caption="Sunset Lighthouse">
+        <img src="{{ config.extra.image_base }}/sunset-lighthouse.jpg" alt="Sunset Lighthouse" loading="lazy">
+        <div class="works-item__overlay"><span>Sunset Lighthouse</span></div>
+      </div>
+      <div class="works-item tall fade-in stagger-16" data-src="{{ config.extra.image_base }}/atelier-petals.jpg" data-caption="Atelier Petals">
+        <img src="{{ config.extra.image_base }}/atelier-petals.jpg" alt="Atelier Petals" loading="lazy">
+        <div class="works-item__overlay"><span>Atelier Petals</span></div>
+      </div>
+      <div class="works-item fade-in stagger-17" data-src="{{ config.extra.image_base }}/azure-breeze.jpg" data-caption="Azure Breeze">
+        <img src="{{ config.extra.image_base }}/azure-breeze.jpg" alt="Azure Breeze" loading="lazy">
+        <div class="works-item__overlay"><span>Azure Breeze</span></div>
+      </div>
+      <div class="works-item wide fade-in stagger-18" data-src="{{ config.extra.image_base }}/cozy-lunch.jpg" data-caption="Cozy Lunch">
+        <img src="{{ config.extra.image_base }}/cozy-lunch.jpg" alt="Cozy Lunch" loading="lazy">
+        <div class="works-item__overlay"><span>Cozy Lunch</span></div>
+      </div>
+      <div class="works-item tall fade-in stagger-19" data-src="{{ config.extra.image_base }}/twilight-duo.jpg" data-caption="Twilight Duo">
+        <img src="{{ config.extra.image_base }}/twilight-duo.jpg" alt="Twilight Duo" loading="lazy">
+        <div class="works-item__overlay"><span>Twilight Duo</span></div>
+      </div>
+      <div class="works-item fade-in stagger-20" data-src="{{ config.extra.image_base }}/sunflower-snap.jpg" data-caption="Sunflower Snap">
+        <img src="{{ config.extra.image_base }}/sunflower-snap.jpg" alt="Sunflower Snap" loading="lazy">
+        <div class="works-item__overlay"><span>Sunflower Snap</span></div>
+      </div>
+      <div class="works-item tall fade-in stagger-21" data-src="{{ config.extra.image_base }}/rainbow-windmill.jpg" data-caption="Rainbow Windmill">
+        <img src="{{ config.extra.image_base }}/rainbow-windmill.jpg" alt="Rainbow Windmill" loading="lazy">
+        <div class="works-item__overlay"><span>Rainbow Windmill</span></div>
       </div>
     </div>
   </section>
@@ -824,6 +1061,13 @@
     </div>
   </section>
 
+  <!-- ===== Lightbox ===== -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox__close" id="lightbox-close">✕</div>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox__caption" id="lightbox-caption"></div>
+  </div>
+
   <!-- ===== Footer ===== -->
   <footer class="home-footer">
     © 2025 Layered Bloom's photo — 八重咲クラ
@@ -838,17 +1082,82 @@
 {{ super() }}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var observer = new IntersectionObserver(function (entries) {
+
+  /* ===== Fade-in with stagger (IntersectionObserver) ===== */
+  var fadeObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.08 });
 
   document.querySelectorAll('.fade-in').forEach(function (el) {
-    observer.observe(el);
+    fadeObserver.observe(el);
   });
+
+  /* ===== Nav scroll state ===== */
+  var nav = document.querySelector('.home-nav');
+  if (nav) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 60) {
+        nav.classList.add('home-nav--scrolled');
+      } else {
+        nav.classList.remove('home-nav--scrolled');
+      }
+    }, { passive: true });
+  }
+
+  /* ===== Active section highlight ===== */
+  var sections = document.querySelectorAll('.home-section[id]');
+  var navLinks = document.querySelectorAll('.home-nav__links a[href^="#"]');
+  if (sections.length && navLinks.length) {
+    var sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.getAttribute('id');
+          navLinks.forEach(function (link) {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(function (s) { sectionObserver.observe(s); });
+  }
+
+  /* ===== Lightbox ===== */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+  var lightboxCaption = document.getElementById('lightbox-caption');
+  var lightboxClose = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('.works-item[data-src]').forEach(function (item) {
+    item.addEventListener('click', function () {
+      lightboxImg.src = item.getAttribute('data-src');
+      lightboxCaption.textContent = item.getAttribute('data-caption') || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightbox) {
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
+    }
+  });
+
 });
 </script>
 {% endblock %}
