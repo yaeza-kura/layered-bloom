@@ -327,8 +327,22 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem 1.5rem;
   list-style: none !important;
-  padding: 0 !important;
+  padding: 0 1rem 0 0 !important;
   margin: 0 !important;
+  max-height: 320px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--purple) transparent;
+}
+.awards-grid::-webkit-scrollbar {
+  width: 4px;
+}
+.awards-grid::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 2px;
+}
+.awards-grid::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .awards-grid li {
@@ -780,6 +794,7 @@
 @media (max-width: 640px) {
   .awards-grid {
     grid-template-columns: 1fr;
+    max-height: 280px;
   }
 }
 
@@ -880,41 +895,13 @@
     <div class="section-label">Awards</div>
     <h2 class="section-title">受賞歴</h2>
     <ul class="awards-grid">
-      <li class="fade-in stagger-1"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥇</span>
-        <span class="award-name">ツクルノモリ全力応援フォトコン</span>
-        <span class="award-detail">最優秀賞</span>
+      {% for award in config.extra.awards %}
+      <li class="fade-in stagger-{{ loop.index }}"><a href="{{ award.url }}" target="_blank" rel="noopener">
+        <span class="award-icon">{{ award.icon }}</span>
+        <span class="award-name">{{ award.name }}</span>
+        <span class="award-detail">{{ award.detail }}</span>
       </a></li>
-      <li class="fade-in stagger-2"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥇</span>
-        <span class="award-name">バニラちゃんフォトコンテスト</span>
-        <span class="award-detail">最優秀賞</span>
-      </a></li>
-      <li class="fade-in stagger-3"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥇</span>
-        <span class="award-name">あおぎり高校公式VRC衣装フォトコン</span>
-        <span class="award-detail">最優秀賞</span>
-      </a></li>
-      <li class="fade-in stagger-4"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥇</span>
-        <span class="award-name">九尾の傍観者フォトコンテスト</span>
-        <span class="award-detail">最優秀賞</span>
-      </a></li>
-      <li class="fade-in stagger-5"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥈</span>
-        <span class="award-name">SSフォトコン</span>
-        <span class="award-detail">優秀賞</span>
-      </a></li>
-      <li class="fade-in stagger-6"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥈</span>
-        <span class="award-name">Daimaru Matsuzakaya Virtual Photo Awards vol.1</span>
-        <span class="award-detail">優秀賞</span>
-      </a></li>
-      <li class="fade-in stagger-7"><a href="#" target="_blank" rel="noopener">
-        <span class="award-icon">🥈</span>
-        <span class="award-name">びきたんさんアバターフォトコン</span>
-        <span class="award-detail">優秀賞</span>
-      </a></li>
+      {% endfor %}
     </ul>
   </section>
 
@@ -923,94 +910,16 @@
     <div class="section-label">Works</div>
     <h2 class="section-title">作品ギャラリー</h2>
     {#
-      画像を差し替えるには placeholder の div を <img> に変更:
-      <img src="{{ config.extra.image_base }}/photo01.jpg" alt="作品名" loading="lazy">
+      作品の追加・並べ替え・削除は data/gallery.yml を編集する。
+      `python tools/upload.py --gallery 写真.png` でアップロードと追記が一度に済む。
     #}
     <div class="works-grid">
-      <div class="works-item tall fade-in stagger-1" data-src="{{ config.extra.image_base }}/forest-lantern.jpg" data-caption="Forest Lantern">
-        <img src="{{ config.extra.image_base }}/forest-lantern.jpg" alt="Forest Lantern" loading="lazy">
-        <div class="works-item__overlay"><span>Forest Lantern</span></div>
+      {% for work in config.extra.gallery %}
+      <div class="works-item{% if work.size %} {{ work.size }}{% endif %} fade-in stagger-{{ loop.index if loop.index <= 21 else 21 }}" data-src="{{ config.extra.image_base }}/{{ work.file }}" data-caption="{{ work.caption }}">
+        <img src="{{ config.extra.image_base }}/{{ work.file }}" alt="{{ work.caption }}" loading="lazy">
+        <div class="works-item__overlay"><span>{{ work.caption }}</span></div>
       </div>
-      <div class="works-item wide fade-in stagger-2" data-src="{{ config.extra.image_base }}/crimson-gallery.jpg" data-caption="Crimson Gallery">
-        <img src="{{ config.extra.image_base }}/crimson-gallery.jpg" alt="Crimson Gallery" loading="lazy">
-        <div class="works-item__overlay"><span>Crimson Gallery</span></div>
-      </div>
-      <div class="works-item fade-in stagger-3" data-src="{{ config.extra.image_base }}/frosted-glass.jpg" data-caption="Frosted Glass">
-        <img src="{{ config.extra.image_base }}/frosted-glass.jpg" alt="Frosted Glass" loading="lazy">
-        <div class="works-item__overlay"><span>Frosted Glass</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-4" data-src="{{ config.extra.image_base }}/cafe-smile.jpg" data-caption="Cafe Smile">
-        <img src="{{ config.extra.image_base }}/cafe-smile.jpg" alt="Cafe Smile" loading="lazy">
-        <div class="works-item__overlay"><span>Cafe Smile</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-5" data-src="{{ config.extra.image_base }}/blue-gothic.jpg" data-caption="Blue Gothic">
-        <img src="{{ config.extra.image_base }}/blue-gothic.jpg" alt="Blue Gothic" loading="lazy">
-        <div class="works-item__overlay"><span>Blue Gothic</span></div>
-      </div>
-      <div class="works-item fade-in stagger-6" data-src="{{ config.extra.image_base }}/water-splash.jpg" data-caption="Water Splash">
-        <img src="{{ config.extra.image_base }}/water-splash.jpg" alt="Water Splash" loading="lazy">
-        <div class="works-item__overlay"><span>Water Splash</span></div>
-      </div>
-      <div class="works-item fade-in stagger-7" data-src="{{ config.extra.image_base }}/library-reach.jpg" data-caption="Library Reach">
-        <img src="{{ config.extra.image_base }}/library-reach.jpg" alt="Library Reach" loading="lazy">
-        <div class="works-item__overlay"><span>Library Reach</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-8" data-src="{{ config.extra.image_base }}/moonlit-silhouette.jpg" data-caption="Moonlit Silhouette">
-        <img src="{{ config.extra.image_base }}/moonlit-silhouette.jpg" alt="Moonlit Silhouette" loading="lazy">
-        <div class="works-item__overlay"><span>Moonlit Silhouette</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-9" data-src="{{ config.extra.image_base }}/angel-sketch.jpg" data-caption="Angel Sketch">
-        <img src="{{ config.extra.image_base }}/angel-sketch.jpg" alt="Angel Sketch" loading="lazy">
-        <div class="works-item__overlay"><span>Angel Sketch</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-10" data-src="{{ config.extra.image_base }}/summer-pool.jpg" data-caption="Summer Pool">
-        <img src="{{ config.extra.image_base }}/summer-pool.jpg" alt="Summer Pool" loading="lazy">
-        <div class="works-item__overlay"><span>Summer Pool</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-11" data-src="{{ config.extra.image_base }}/night-garden.jpg" data-caption="Night Garden">
-        <img src="{{ config.extra.image_base }}/night-garden.jpg" alt="Night Garden" loading="lazy">
-        <div class="works-item__overlay"><span>Night Garden</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-12" data-src="{{ config.extra.image_base }}/card-trick.jpg" data-caption="Card Trick">
-        <img src="{{ config.extra.image_base }}/card-trick.jpg" alt="Card Trick" loading="lazy">
-        <div class="works-item__overlay"><span>Card Trick</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-13" data-src="{{ config.extra.image_base }}/stargazer-friends.jpg" data-caption="Stargazer Friends">
-        <img src="{{ config.extra.image_base }}/stargazer-friends.jpg" alt="Stargazer Friends" loading="lazy">
-        <div class="works-item__overlay"><span>Stargazer Friends</span></div>
-      </div>
-      <div class="works-item fade-in stagger-14" data-src="{{ config.extra.image_base }}/golden-moonrise.jpg" data-caption="Golden Moonrise">
-        <img src="{{ config.extra.image_base }}/golden-moonrise.jpg" alt="Golden Moonrise" loading="lazy">
-        <div class="works-item__overlay"><span>Golden Moonrise</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-15" data-src="{{ config.extra.image_base }}/sunset-lighthouse.jpg" data-caption="Sunset Lighthouse">
-        <img src="{{ config.extra.image_base }}/sunset-lighthouse.jpg" alt="Sunset Lighthouse" loading="lazy">
-        <div class="works-item__overlay"><span>Sunset Lighthouse</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-16" data-src="{{ config.extra.image_base }}/atelier-petals.jpg" data-caption="Atelier Petals">
-        <img src="{{ config.extra.image_base }}/atelier-petals.jpg" alt="Atelier Petals" loading="lazy">
-        <div class="works-item__overlay"><span>Atelier Petals</span></div>
-      </div>
-      <div class="works-item fade-in stagger-17" data-src="{{ config.extra.image_base }}/azure-breeze.jpg" data-caption="Azure Breeze">
-        <img src="{{ config.extra.image_base }}/azure-breeze.jpg" alt="Azure Breeze" loading="lazy">
-        <div class="works-item__overlay"><span>Azure Breeze</span></div>
-      </div>
-      <div class="works-item wide fade-in stagger-18" data-src="{{ config.extra.image_base }}/cozy-lunch.jpg" data-caption="Cozy Lunch">
-        <img src="{{ config.extra.image_base }}/cozy-lunch.jpg" alt="Cozy Lunch" loading="lazy">
-        <div class="works-item__overlay"><span>Cozy Lunch</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-19" data-src="{{ config.extra.image_base }}/twilight-duo.jpg" data-caption="Twilight Duo">
-        <img src="{{ config.extra.image_base }}/twilight-duo.jpg" alt="Twilight Duo" loading="lazy">
-        <div class="works-item__overlay"><span>Twilight Duo</span></div>
-      </div>
-      <div class="works-item fade-in stagger-20" data-src="{{ config.extra.image_base }}/sunflower-snap.jpg" data-caption="Sunflower Snap">
-        <img src="{{ config.extra.image_base }}/sunflower-snap.jpg" alt="Sunflower Snap" loading="lazy">
-        <div class="works-item__overlay"><span>Sunflower Snap</span></div>
-      </div>
-      <div class="works-item tall fade-in stagger-21" data-src="{{ config.extra.image_base }}/rainbow-windmill.jpg" data-caption="Rainbow Windmill">
-        <img src="{{ config.extra.image_base }}/rainbow-windmill.jpg" alt="Rainbow Windmill" loading="lazy">
-        <div class="works-item__overlay"><span>Rainbow Windmill</span></div>
-      </div>
+      {% endfor %}
     </div>
   </section>
 

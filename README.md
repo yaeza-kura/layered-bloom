@@ -63,7 +63,25 @@ copy .env.example .env
 pip install -r tools/requirements.txt
 ```
 
-### 画像のアップロード
+### トップのギャラリーに作品を追加する（いちばんよく使う）
+
+```bash
+# アップロード + data/gallery.yml へ自動追記（縦長/横長も画像サイズから自動判定）
+python tools/upload.py --gallery photo.png
+
+# 表示名・ファイル名を指定（VRChatのスクショを日本語名のまま渡せる）
+python tools/upload.py --gallery --name summer-pool --caption "Summer Pool" "VRChat_2026-09-02.png"
+
+# ギャラリーの一番上に追加（デフォルトは末尾）
+python tools/upload.py --gallery --top photo.png
+```
+
+あとは `git add data/gallery.yml && git commit && git push` するだけで反映される。
+
+並べ替え・削除・表示名の変更は [data/gallery.yml](data/gallery.yml) を直接編集する。
+`size: tall`（縦長・2行分）/ `size: wide`（横長・2列分）/ 省略で通常セル。
+
+### 画像のアップロードのみ（ブログ記事用など）
 
 ```bash
 # 1枚アップロード（自動で横幅1920px・JPEG品質80%にリサイズ）
@@ -87,22 +105,11 @@ python tools/upload.py --delete images/photo.jpg
 
 アップロード後に表示される Markdown をそのまま記事に貼り付ければOK。
 
-### サイトで使う
+### 仕組み
 
-`mkdocs.yml` の `extra.image_base` を R2 の公開URLに書き換える:
-
-```yaml
-extra:
-  image_base: https://pub-xxxxxxxx.r2.dev/images
-```
-
-`overrides/home.html` のギャラリーで画像を差し替える:
-
-```html
-<div class="works-item">
-  <img src="{{ config.extra.image_base }}/photo01.jpg" alt="作品名" loading="lazy">
-</div>
-```
+- 画像本体は Cloudflare R2（`mkdocs.yml` の `extra.image_base` が公開URL）
+- ギャラリーの一覧は `data/gallery.yml` → ビルド時に `hooks/gallery.py` が読み込み、`overrides/home.html` がループで描画
+- 受賞歴は `mkdocs.yml` の `extra.awards` を編集する
 
 ## デプロイ
 
@@ -124,6 +131,8 @@ docs/
 ├── images/               # 画像置き場（少量ならここ）
 ├── stylesheets/extra.css # カスタムCSS
 └── blog/posts/           # ブログ記事
+data/gallery.yml          # トップのギャラリー一覧（表示順・表示名・セル種別）
+hooks/gallery.py          # gallery.yml を読み込む MkDocs フック
 overrides/home.html       # トップページ用カスタムテンプレート
-tools/upload.py           # R2 画像アップローダー
+tools/upload.py           # R2 画像アップローダー（--gallery でギャラリー自動追記）
 ```

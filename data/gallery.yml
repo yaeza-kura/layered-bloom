@@ -1,0 +1,62 @@
+# 作品ギャラリー（上から表示順）
+#   file:    R2 の images/ フォルダ内のファイル名
+#   caption: 表示名（ホバー時とライトボックスに出る）
+#   size:    tall（縦長・2行分）/ wide（横長・2列分）/ 省略で通常セル
+# `python tools/upload.py --gallery 写真.png` で自動追記される。並べ替えはこのファイルを直接編集。
+- file: forest-lantern.jpg
+  caption: Forest Lantern
+  size: tall
+- file: crimson-gallery.jpg
+  caption: Crimson Gallery
+  size: wide
+- file: frosted-glass.jpg
+  caption: Frosted Glass
+- file: cafe-smile.jpg
+  caption: Cafe Smile
+  size: wide
+- file: blue-gothic.jpg
+  caption: Blue Gothic
+  size: tall
+- file: water-splash.jpg
+  caption: Water Splash
+- file: library-reach.jpg
+  caption: Library Reach
+- file: moonlit-silhouette.jpg
+  caption: Moonlit Silhouette
+  size: tall
+- file: angel-sketch.jpg
+  caption: Angel Sketch
+  size: wide
+- file: summer-pool.jpg
+  caption: Summer Pool
+  size: wide
+- file: night-garden.jpg
+  caption: Night Garden
+  size: wide
+- file: card-trick.jpg
+  caption: Card Trick
+  size: wide
+- file: stargazer-friends.jpg
+  caption: Stargazer Friends
+  size: tall
+- file: golden-moonrise.jpg
+  caption: Golden Moonrise
+- file: sunset-lighthouse.jpg
+  caption: Sunset Lighthouse
+  size: wide
+- file: atelier-petals.jpg
+  caption: Atelier Petals
+  size: tall
+- file: azure-breeze.jpg
+  caption: Azure Breeze
+- file: cozy-lunch.jpg
+  caption: Cozy Lunch
+  size: wide
+- file: twilight-duo.jpg
+  caption: Twilight Duo
+  size: tall
+- file: sunflower-snap.jpg
+  caption: Sunflower Snap
+- file: rainbow-windmill.jpg
+  caption: Rainbow Windmill
+  size: tall

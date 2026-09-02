@@ -2,7 +2,16 @@
 Cloudflare R2 画像アップローダー
 
 使い方:
-  # 1枚アップロード（自動リサイズ: 横幅1920px, JPEG品質80%）
+  # トップのギャラリーに追加（アップロード + data/gallery.yml に自動追記。縦長/横長も自動判定）
+  python tools/upload.py --gallery photo.png
+
+  # ギャラリー追加時に表示名とファイル名を指定（日本語ファイル名のまま渡せる）
+  python tools/upload.py --gallery --name summer-pool --caption "Summer Pool" VRChat_スクショ.png
+
+  # 一番上に追加（デフォルトは末尾）
+  python tools/upload.py --gallery --top photo.png
+
+  # 1枚アップロードのみ（自動リサイズ: 横幅1920px, JPEG品質80%）
   python tools/upload.py photo.png
 
   # 複数枚アップロード
@@ -31,9 +40,20 @@ import os
 import sys
 from pathlib import Path
 
+from typing import TypedDict
+
 import boto3
+import yaml
 from dotenv import load_dotenv
 from PIL import Image
+
+GALLERY_FILE: Path = Path(__file__).resolve().parent.parent / "data" / "gallery.yml"
+
+
+class UploadInfo(TypedDict):
+    url: str
+    filename: str
+    size: str | None
 
 load_dotenv()
 
@@ -76,9 +96,15 @@ def resize_image(file_path: Path, max_width: int, quality: int) -> tuple[bytes, 
 
 
 def upload_file(
-    client, file_path: Path, prefix: str, max_width: int, quality: int, no_resize: bool
-) -> str:
-    """ファイルをR2にアップロードし、公開URLを返す。"""
+    client,
+    file_path: Path,
+    prefix: str,
+    max_width: int,
+    quality: int,
+    no_resize: bool,
+    name: str | None = None,
+) -> UploadInfo:
+    """ファイルをR2にアップロードし、{url, filename, size} を返す。"""
     if no_resize:
         data = file_path.read_bytes()
         content_type = mimetypes.guess_type(str(file_path))[0] or "application/octet-stream"
@@ -87,7 +113,7 @@ def upload_file(
         data, content_type = resize_image(file_path, max_width, quality)
         ext = ".jpg"
 
-    key = f"{prefix}/{file_path.stem}{ext}"
+    key = f"{prefix}/{name or file_path.stem}{ext}"
 
     client.put_object(
         Bucket=BUCKET_NAME,
@@ -99,7 +125,59 @@ def upload_file(
     url = f"{PUBLIC_URL}/{key}"
     size_kb = len(data) / 1024
     print(f"  {file_path.name} -> {url} ({size_kb:.0f} KB)")
-    return url
+    return {"url": url, "filename": key.rsplit("/", 1)[-1], "size": classify_size(file_path)}
+
+
+def classify_size(file_path: Path) -> str | None:
+    """縦横比からギャラリーのセル種別を判定する。横長 -> wide / 縦長 -> tall / それ以外 -> None"""
+    try:
+        with Image.open(file_path) as img:
+            ratio = img.width / img.height
+    except OSError:
+        return None
+    if ratio >= 1.45:
+        return "wide"
+    if ratio <= 0.8:
+        return "tall"
+    return None
+
+
+def caption_from_stem(stem: str) -> str:
+    return stem.replace("-", " ").replace("_", " ").title()
+
+
+def add_to_gallery(uploaded: list[UploadInfo], caption: str | None, top: bool) -> None:
+    """data/gallery.yml に追記する。既存の同名ファイルは caption/size を更新。"""
+    entries: list[dict[str, str]] = yaml.safe_load(GALLERY_FILE.read_text(encoding="utf-8")) or []
+    existing: dict[str, dict[str, str]] = {e["file"]: e for e in entries}
+
+    for info in uploaded:
+        entry: dict[str, str] = {
+            "file": info["filename"],
+            "caption": caption or caption_from_stem(Path(info["filename"]).stem),
+        }
+        if info["size"]:
+            entry["size"] = info["size"]
+        if info["filename"] in existing:
+            existing[info["filename"]].clear()
+            existing[info["filename"]].update(entry)
+            print(f"  gallery.yml: {info['filename']} を更新")
+        elif top:
+            entries.insert(0, entry)
+            print(f"  gallery.yml: {info['filename']} を先頭に追加 ({entry.get('size', 'normal')})")
+        else:
+            entries.append(entry)
+            print(f"  gallery.yml: {info['filename']} を末尾に追加 ({entry.get('size', 'normal')})")
+
+    header = (
+        "# 作品ギャラリー（上から表示順）\n"
+        "#   file:    R2 の images/ フォルダ内のファイル名\n"
+        "#   caption: 表示名（ホバー時とライトボックスに出る）\n"
+        "#   size:    tall（縦長・2行分）/ wide（横長・2列分）/ 省略で通常セル\n"
+        "# `python tools/upload.py --gallery 写真.png` で自動追記される。並べ替えはこのファイルを直接編集。\n"
+    )
+    body = yaml.safe_dump(entries, allow_unicode=True, sort_keys=False)
+    GALLERY_FILE.write_text(header + body, encoding="utf-8")
 
 
 def list_objects(client) -> None:
@@ -148,6 +226,10 @@ def main():
     parser.add_argument("--no-resize", action="store_true", help="リサイズせず元画像のまま")
     parser.add_argument("--list", action="store_true", help="アップロード済み一覧")
     parser.add_argument("--delete", metavar="KEY", help="画像を削除")
+    parser.add_argument("--gallery", action="store_true", help="data/gallery.yml に自動追記する")
+    parser.add_argument("--top", action="store_true", help="--gallery 時に先頭へ追加（デフォルトは末尾）")
+    parser.add_argument("--caption", help="ギャラリーの表示名（1枚のときのみ。省略時はファイル名から生成）")
+    parser.add_argument("--name", help="アップロード後のファイル名（拡張子なし・1枚のときのみ）")
     args: argparse.Namespace = parser.parse_args()
 
     client = get_client()
@@ -166,17 +248,26 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    urls = []
-    for path in paths:
-        url: str = upload_file(client, path, args.prefix, args.width, args.quality, args.no_resize)
-        urls.append(url)
+    if (args.caption or args.name) and len(paths) > 1:
+        print("ERROR: --caption / --name は1枚アップロードのときだけ使えます", file=sys.stderr)
+        sys.exit(1)
 
-    if urls:
+    uploaded: list[UploadInfo] = []
+    for path in paths:
+        info: UploadInfo = upload_file(
+            client, path, args.prefix, args.width, args.quality, args.no_resize, args.name
+        )
+        uploaded.append(info)
+
+    if args.gallery:
+        print()
+        add_to_gallery(uploaded, args.caption, args.top)
+        print("  -> 確認: mkdocs serve / 反映: git add data/gallery.yml && git commit && git push")
+    elif uploaded:
         print()
         print("Markdown:")
-        for url in urls:
-            name = url.rsplit("/", 1)[-1]
-            print(f"  ![{name}]({url})")
+        for info in uploaded:
+            print(f"  ![{info['filename']}]({info['url']})")
 
 
 if __name__ == "__main__":

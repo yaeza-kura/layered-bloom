@@ -1,6 +1,6 @@
 site_name: Layered Bloom's photo
 site_description: 八重咲クラ — VRChat Photographer
-site_url: ""
+site_url: https://layered-bloom.pages.dev/
 
 theme:
   name: material
@@ -19,6 +19,9 @@ theme:
     - navigation.top
     - content.code.copy
 
+hooks:
+  - hooks/gallery.py
+
 plugins:
   - search
   - blog:
@@ -34,7 +37,7 @@ nav:
   - Portfolio: portfolio.md
   - About: about.md
   - Blog:
-    - blog/index.md
+      - blog/index.md
 
 markdown_extensions:
   - attr_list
@@ -53,6 +56,39 @@ extra_css:
 
 extra:
   image_base: https://pub-51f06b982bee4a31ace985952c2651a2.r2.dev/images
+  awards:
+    - name: ツクルノモリ全力応援フォトコン
+      detail: 最優秀賞
+      icon: "🥇"
+      url: "#"
+    - name: 第三回 ゆるフォトコン
+      detail: 大賞
+      icon: "🥇"
+      url: "#"
+    - name: バニラちゃんフォトコンテスト
+      detail: 最優秀賞
+      icon: "🥇"
+      url: "#"
+    - name: あおぎり高校公式VRC衣装フォトコン
+      detail: 最優秀賞
+      icon: "🥇"
+      url: "#"
+    - name: 九尾の傍観者フォトコンテスト
+      detail: 最優秀賞
+      icon: "🥇"
+      url: "#"
+    - name: SSフォトコン
+      detail: 優秀賞
+      icon: "🥈"
+      url: "#"
+    - name: Daimaru Matsuzakaya Virtual Photo Awards vol.1
+      detail: 優秀賞
+      icon: "🥈"
+      url: "#"
+    - name: びきたんさんアバターフォトコン
+      detail: 優秀賞
+      icon: "🥈"
+      url: "#"
   social:
     - icon: fontawesome/brands/x-twitter
       link: https://x.com/yaeza_kura
