@@ -147,34 +147,51 @@ def caption_from_stem(stem: str) -> str:
 
 
 def add_to_gallery(uploaded: list[UploadInfo], caption: str | None, top: bool) -> None:
-    """data/gallery.yml に追記する。既存の同名ファイルは caption/size を更新。"""
+    """data/gallery.yml に追記する。
+
+    既にある項目は表示順・表示名・セル種別をそのまま保つ。--caption を明示したときだけ
+    表示名を上書きする（画像を上げ直すたびに手編集が消えるのを防ぐため）。
+    """
     entries: list[dict[str, str]] = yaml.safe_load(GALLERY_FILE.read_text(encoding="utf-8")) or []
     existing: dict[str, dict[str, str]] = {e["file"]: e for e in entries}
+    inserted = 0
 
     for info in uploaded:
+        filename = info["filename"]
+        current = existing.get(filename)
+        if current is not None:
+            if caption:
+                current["caption"] = caption
+                print(f"  gallery.yml: {filename} の表示名を更新（位置とセル種別は維持）")
+            else:
+                print(f"  gallery.yml: {filename} は既にあるので内容を維持")
+            continue
+
         entry: dict[str, str] = {
-            "file": info["filename"],
-            "caption": caption or caption_from_stem(Path(info["filename"]).stem),
+            "file": filename,
+            "caption": caption or caption_from_stem(Path(filename).stem),
         }
         if info["size"]:
             entry["size"] = info["size"]
-        if info["filename"] in existing:
-            existing[info["filename"]].clear()
-            existing[info["filename"]].update(entry)
-            print(f"  gallery.yml: {info['filename']} を更新")
-        elif top:
-            entries.insert(0, entry)
-            print(f"  gallery.yml: {info['filename']} を先頭に追加 ({entry.get('size', 'normal')})")
+
+        if top:
+            # 複数枚を渡したときに逆順にならないよう、挿入位置をずらしていく
+            entries.insert(inserted, entry)
+            inserted += 1
+            print(f"  gallery.yml: {filename} を先頭に追加 ({entry.get('size', 'normal')})")
         else:
             entries.append(entry)
-            print(f"  gallery.yml: {info['filename']} を末尾に追加 ({entry.get('size', 'normal')})")
+            print(f"  gallery.yml: {filename} を末尾に追加 ({entry.get('size', 'normal')})")
+
+        # 同じ実行内で同名キーに落ちる2枚目を重複させない
+        existing[filename] = entry
 
     header = (
         "# 作品ギャラリー（上から表示順）\n"
         "#   file:    R2 の images/ フォルダ内のファイル名\n"
         "#   caption: 表示名（ホバー時とライトボックスに出る）\n"
         "#   size:    tall（縦長・2行分）/ wide（横長・2列分）/ 省略で通常セル\n"
-        "# `python tools/upload.py --gallery 写真.png` で自動追記される。並べ替えはこのファイルを直接編集。\n"
+        "# 管理画面から編集される。手で直すことも可能。\n"
     )
     body = yaml.safe_dump(entries, allow_unicode=True, sort_keys=False)
     GALLERY_FILE.write_text(header + body, encoding="utf-8")
@@ -246,6 +263,15 @@ def main():
     paths = collect_files(args.files, args.dir)
     if not paths:
         parser.print_help()
+        sys.exit(1)
+
+    if args.gallery and args.prefix != "images":
+        # gallery.yml は画像の basename しか持たず、URL は extra.image_base + basename で
+        # 組み立てられる。images 以外に置くとリンク切れになるので先に止める。
+        print(
+            f"ERROR: --gallery は --prefix images でのみ使えます（指定: {args.prefix}）",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if (args.caption or args.name) and len(paths) > 1:

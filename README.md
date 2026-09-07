@@ -63,7 +63,19 @@ copy .env.example .env
 pip install -r tools/requirements.txt
 ```
 
-### トップのギャラリーに作品を追加する（いちばんよく使う）
+### 管理画面から編集する（いちばんよく使う）
+
+ブラウザ（スマホ可）から、並べ替え・キャプション変更・縦横の切り替え・削除・追加ができる。
+保存すると `data/gallery.yml` が commit され、2〜3分でサイトに反映される。
+
+```
+https://<worker名>.<サブドメイン>.workers.dev
+```
+
+セットアップと仕様は [admin/README.md](admin/README.md) を参照。
+Cloudflare Worker として動いていて、npm も wrangler も要らない（ダッシュボードに貼るだけ）。
+
+### コマンドラインからギャラリーに追加する
 
 ```bash
 # アップロード + data/gallery.yml へ自動追記（縦長/横長も画像サイズから自動判定）
@@ -164,4 +176,7 @@ data/
 hooks/data.py             # data/*.yml を config.extra に載せる MkDocs フック
 overrides/home.html       # トップページ用カスタムテンプレート
 tools/upload.py           # R2 画像アップローダー（--gallery でギャラリー自動追記）
+tools/test_gallery.py     # upload.py のギャラリー追記まわりの回帰テスト
+admin/worker.js           # ギャラリー管理画面（Cloudflare Worker・単一ファイル）
+admin/test_yaml.mjs       # 管理画面の YAML 実装の往復テスト
 ```
