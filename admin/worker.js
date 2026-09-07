@@ -580,7 +580,9 @@ function slugify(text, fallback) {
   var slug = String(text).toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return slug || fallback;
+  // 日本語のファイル名だと数字しか残らないことがある（「タイトルなし2」→「2」）。
+  // 英字を含み3文字以上でなければ意味のある名前ではないとみなし、日時に逃がす。
+  return /[a-z]/.test(slug) && slug.length >= 3 ? slug : fallback;
 }
 
 function stamp() {
