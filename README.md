@@ -107,9 +107,35 @@ python tools/upload.py --delete images/photo.jpg
 
 ### 仕組み
 
+`data/` 以下の YAML がサイトの唯一の情報源になっている。
+
+```text
+data/awards.yml  ──┐
+data/events.yml  ──┼─→ hooks/data.py ─→ config.extra.awards / .events / .gallery
+data/gallery.yml ──┘   （data/*.yml を起動時に全部読む）
+                              │
+              ┌───────────────┴───────────────┐
+      overrides/home.html              docs/portfolio.md
+```
+
 - 画像本体は Cloudflare R2（`mkdocs.yml` の `extra.image_base` が公開URL）
-- ギャラリーの一覧は `data/gallery.yml` → ビルド時に `hooks/gallery.py` が読み込み、`overrides/home.html` がループで描画
-- 受賞歴は `mkdocs.yml` の `extra.awards` を編集する
+- 一覧を増やしたいときは `data/` に YAML を置くだけでよく、`hooks/data.py` の編集は不要
+  （`data/foo.yml` を置けば `config.extra.foo` で参照できる）
+- Markdown ページから参照するときは front-matter に `jinja: true` を書く。
+  書いたページだけ Jinja が有効になるので、ブログ記事に `{{ }}` が出てきても壊れない
+
+### 受賞歴・イベントの編集
+
+[data/awards.yml](data/awards.yml) と [data/events.yml](data/events.yml) を編集する。
+トップページと [Portfolio ページ](docs/portfolio.md) が同じデータを見ているので、片方だけ古くなることがない。
+
+```yaml
+# data/awards.yml
+- name: ○○フォトコン
+  detail: 最優秀賞
+  icon: "🥇"
+  url: https://...   # 任意。書けばリンクになり、省けばただのテキスト
+```
 
 ## デプロイ
 
@@ -131,8 +157,11 @@ docs/
 ├── images/               # 画像置き場（少量ならここ）
 ├── stylesheets/extra.css # カスタムCSS
 └── blog/posts/           # ブログ記事
-data/gallery.yml          # トップのギャラリー一覧（表示順・表示名・セル種別）
-hooks/gallery.py          # gallery.yml を読み込む MkDocs フック
+data/
+├── awards.yml            # 受賞歴（トップ・Portfolio 共通）
+├── events.yml            # 主催フォトコン（トップ・Portfolio 共通）
+└── gallery.yml           # トップのギャラリー一覧（表示順・表示名・セル種別）
+hooks/data.py             # data/*.yml を config.extra に載せる MkDocs フック
 overrides/home.html       # トップページ用カスタムテンプレート
 tools/upload.py           # R2 画像アップローダー（--gallery でギャラリー自動追記）
 ```

@@ -1,30 +1,25 @@
+---
+jinja: true
+---
+
 # Portfolio
+
+受賞歴・主催イベントは `data/awards.yml` と `data/events.yml` が唯一の情報源で、
+トップページと同じデータをここでも描画している。
 
 ## 受賞歴
 
-| 年 | コンテスト名 | 結果 |
-|----|-------------|------|
-| 2025 | ○○フォトコン | 最優秀賞 |
-| 2024 | △△フォトコン | 金賞 |
-
-※ 受賞歴は後日実データに更新予定です。
-
+{% set has_year = config.extra.awards | selectattr("year", "defined") | list | length > 0 -%}
+| {% if has_year %}年 | {% endif %}コンテスト名 | 結果 |
+|{% if has_year %}----|{% endif %}-------------|------|
+{% for a in config.extra.awards -%}
+| {% if has_year %}{{ a.year | default("") }} | {% endif %}{% if a.url %}[{{ a.name }}]({{ a.url }}){% else %}{{ a.name }}{% endif %} | {{ a.detail }} |
+{% endfor %}
 ## 主催イベント
-
-### アニアスちゃんフォトコン
-
-（説明を後日記入）
-
-### しなのちゃんフォトコン
-
-（説明を後日記入）
-
-### ミルティナちゃんフォトコン
-
-（説明を後日記入）
-
-### 四季彩フォトコン（シリーズ企画）
-
-VRCの写真撮影をもっと身近に。誰でも参加できるフォト祭り！
-
-（詳細を後日記入）
+{% for e in config.extra.events %}
+### {{ e.name }}
+{% if e.motto %}
+> {{ e.motto }}
+{% endif %}
+{{ e.desc.strip() }}
+{% endfor %}

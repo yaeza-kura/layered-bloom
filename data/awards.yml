@@ -1,0 +1,30 @@
+# 受賞歴（上から表示順）
+#   name:   コンテスト名
+#   detail: 受賞内容
+#   icon:   トップページに出す絵文字
+#   url:    任意。書けばリンクになり、省けばただのテキストになる。
+#   year:   任意。書けば Portfolio ページの表に「年」列が出る。
+- name: ツクルノモリ全力応援フォトコン
+  detail: 最優秀賞
+  icon: "🥇"
+- name: 第三回 ゆるフォトコン
+  detail: 大賞
+  icon: "🥇"
+- name: バニラちゃんフォトコンテスト
+  detail: 最優秀賞
+  icon: "🥇"
+- name: あおぎり高校公式VRC衣装フォトコン
+  detail: 最優秀賞
+  icon: "🥇"
+- name: 九尾の傍観者フォトコンテスト
+  detail: 最優秀賞
+  icon: "🥇"
+- name: SSフォトコン
+  detail: 優秀賞
+  icon: "🥈"
+- name: Daimaru Matsuzakaya Virtual Photo Awards vol.1
+  detail: 優秀賞
+  icon: "🥈"
+- name: びきたんさんアバターフォトコン
+  detail: 優秀賞
+  icon: "🥈"

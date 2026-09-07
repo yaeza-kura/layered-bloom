@@ -357,7 +357,8 @@
   background: rgba(196, 160, 212, 0.05);
 }
 
-.awards-grid a {
+.awards-grid a,
+.awards-grid .award-static {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -896,11 +897,14 @@
     <h2 class="section-title">受賞歴</h2>
     <ul class="awards-grid">
       {% for award in config.extra.awards %}
-      <li class="fade-in stagger-{{ loop.index }}"><a href="{{ award.url }}" target="_blank" rel="noopener">
+      <li class="fade-in stagger-{{ loop.index }}">
+        {%- if award.url %}<a href="{{ award.url|e }}" target="_blank" rel="noopener">
+        {%- else %}<span class="award-static">{% endif %}
         <span class="award-icon">{{ award.icon }}</span>
         <span class="award-name">{{ award.name }}</span>
         <span class="award-detail">{{ award.detail }}</span>
-      </a></li>
+        {%- if award.url %}</a>{% else %}</span>{% endif %}
+      </li>
       {% endfor %}
     </ul>
   </section>
@@ -915,8 +919,8 @@
     #}
     <div class="works-grid">
       {% for work in config.extra.gallery %}
-      <div class="works-item{% if work.size %} {{ work.size }}{% endif %} fade-in stagger-{{ loop.index if loop.index <= 21 else 21 }}" data-src="{{ config.extra.image_base }}/{{ work.file }}" data-caption="{{ work.caption }}">
-        <img src="{{ config.extra.image_base }}/{{ work.file }}" alt="{{ work.caption }}" loading="lazy">
+      <div class="works-item{% if work.size %} {{ work.size }}{% endif %} fade-in stagger-{{ loop.index if loop.index <= 21 else 21 }}" data-src="{{ config.extra.image_base }}/{{ work.file|e }}" data-caption="{{ work.caption|e }}">
+        <img src="{{ config.extra.image_base }}/{{ work.file|e }}" alt="{{ work.caption|e }}" loading="lazy">
         <div class="works-item__overlay"><span>{{ work.caption }}</span></div>
       </div>
       {% endfor %}
@@ -927,32 +931,31 @@
   <section id="events" class="home-section events-section fade-in">
     <div class="section-label">Organized Events</div>
     <h2 class="section-title">フォトコン主催</h2>
+    {#
+      イベントの追加・並べ替え・削除は data/events.yml を編集する。
+      motto を持つ項目はカードではなく下の特集ボックスとして描画される。
+    #}
     <div class="events-grid">
+      {% for event in config.extra.events if not event.motto %}
       <div class="event-card">
-        <div class="event-card__number">01</div>
-        <div class="event-card__title">アニアスちゃんフォトコン</div>
-        <div class="event-card__desc">詳細は後日追記予定です。</div>
+        <div class="event-card__number">{{ "%02d"|format(loop.index) }}</div>
+        <div class="event-card__title">{{ event.name }}</div>
+        <div class="event-card__desc">{{ event.desc }}</div>
       </div>
-      <div class="event-card">
-        <div class="event-card__number">02</div>
-        <div class="event-card__title">しなのちゃんフォトコン</div>
-        <div class="event-card__desc">詳細は後日追記予定です。</div>
-      </div>
-      <div class="event-card">
-        <div class="event-card__number">03</div>
-        <div class="event-card__title">ミルティナちゃんフォトコン</div>
-        <div class="event-card__desc">詳細は後日追記予定です。</div>
-      </div>
+      {% endfor %}
     </div>
 
+    {% for event in config.extra.events if event.motto %}
     <div class="shikisai-box fade-in">
-      <div class="shikisai-box__title">🌸 四季彩フォトコン</div>
-      <div class="shikisai-box__motto">"VRCの写真撮影をもっと身近に。誰でも参加できるフォト祭り！"</div>
+      <div class="shikisai-box__title">{% if event.icon %}{{ event.icon }} {% endif %}{{ event.name }}</div>
+      <div class="shikisai-box__motto">"{{ event.motto }}"</div>
       <div class="shikisai-box__desc">
-        季節のテーマに合わせて開催するフォトコンテストシリーズです。<br>
-        初心者からベテランまで、誰でも気軽に参加できる場を目指しています。
+        {{ event.desc.strip()|e|replace("
+", "<br>
+        ") }}
       </div>
     </div>
+    {% endfor %}
   </section>
 
   <!-- ===== Contact ===== -->
