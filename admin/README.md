@@ -34,10 +34,16 @@ Cloudflare のダッシュボードに貼り付けるだけで動く。
 1. GitHub > Settings > Developer settings > **Personal access tokens > Fine-grained tokens**
 2. **Generate new token**
 3. Repository access: **Only select repositories** → `layered-bloom` だけを選ぶ
-4. Permissions > Repository permissions > **Contents** を **Read and write** にする
-5. 生成されたトークン（`github_pat_...`）を控える
+4. **Expiration** は既定が 30 days になっている。**選べる中で一番長いものにする。**
+   期限が切れると管理画面の保存だけが突然失敗するようになり、原因が分かりにくい。
+   選んだ日付は控えておくこと（切れたら同じ手順で作り直して
+   Cloudflare の `GITHUB_TOKEN` を差し替える）。
+5. Permissions > Repository permissions > **Contents** を **Read and write** にする
+6. 生成されたトークン（`github_pat_...`）を控える
 
 > 権限は Contents だけで足りる。他は付けないこと。
+> Contents を選ぶと `Metadata` が自動で Read-only になるが、これは必須の依存なので正常。
+> トークンは画面を離れると二度と表示されない。Cloudflare に貼るまでタブを閉じないこと。
 
 ### 2. Worker を作る
 
