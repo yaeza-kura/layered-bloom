@@ -81,9 +81,17 @@ Worker > **Settings** > **Bindings** > **Add** > **R2 bucket**
 
 ### 5. アクセスする
 
-`https://<worker名>.<あなたのサブドメイン>.workers.dev`
+```
+https://layered-bloom-admin.r-neko-masamun.workers.dev
+```
+
+（`<worker名>.<アカウントのサブドメイン>.workers.dev`。サブドメインは
+Workers & Pages の右側 Account details に出ている）
 
 パスワードを入れればログインできる。Cookie は30日間有効。
+
+変数を入れる前にアクセスすると「設定が不足しています: ...」と表示される。
+これは Worker が動いている証拠なので、手順3・4を終えてから開き直せばよい。
 
 ---
 
