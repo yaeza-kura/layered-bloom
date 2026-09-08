@@ -63,3 +63,6 @@
 - file: "2.jpg"
   caption: "タイトルなし2"
   size: "wide"
+- file: "20260902-013531-3840x2160.jpg"
+  caption: "Angel"
+  size: "wide"
